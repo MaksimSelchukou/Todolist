@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect} from 'react';
 
-import {AddItemForm} from "./components/AddItemForm";
-import {EditableSpan} from "./components/EditableSpan";
+import {AddItemForm} from "./components/addItemForm/AddItemForm";
+import {EditableSpan} from "./components/editableSpan/EditableSpan";
 import {useSelector} from "react-redux";
 import {addTaskTC, fetchTasksTC, removeTaskTC, updateTaskTC} from "./state/tasks-reducer";
 import {RootReducerType} from "./store/store";
@@ -25,10 +25,6 @@ export const Todolist = React.memo((props: PropsType) => {
     const dispatch = useAppDispatch()
     const tasks = useSelector<RootReducerType, Array<TaskType>>(state => state.tasks[props.id])
 
-    // function removeTask(id: string, todolistId: string) {
-    //     const action = removeTaskAC(todolistId, id)
-    //     dispatch(action)
-    // }
     function removeTask(id: string, todolistId: string) {
         // const action = removeTaskAC(todolistId, id)
         dispatch(removeTaskTC(todolistId, id))

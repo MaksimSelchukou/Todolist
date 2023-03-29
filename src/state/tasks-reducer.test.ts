@@ -1,6 +1,6 @@
-import {TasksStateType} from "../App";
+import {TasksStateType} from "../app/App";
 import {todolistId1, todolistId2} from "./todolists-reducer.test";
-import {updateTaskAC, changeTitleTaskAC, removeTaskAC, tasksReducer} from "./tasks-reducer";
+import {updateTaskAC, changeTitleTaskAC, removeTaskAC, tasksReducer, addTaskAC} from "./tasks-reducer";
 import {addTodoAC, removeTodoAC} from "./todolists-reducer";
 import {TaskPriorities, TaskStatuses} from "../api/todolists-api";
 import {v1} from "uuid";
@@ -58,15 +58,25 @@ beforeEach(() => {
     }
 })
 
-// test('correct task should be added in correct todolist', () => {
-//
-//     const endState = tasksReducer(startState, addTaskAC(todolistId1, 'NewTaskkk'))
-//
-//     expect(endState[todolistId1].length).toBe(3)
-//     expect(endState[todolistId1][0].title).toBe('NewTaskkk')
-//     expect(endState[todolistId1][0].id).toBeDefined()
-//     expect(endState[todolistId2].length).toBe(2)
-// })
+test('correct task should be added in correct todolist', () => {
+    const newTask = {
+        id: '1', title: 'NewTaskkk',
+        status: TaskStatuses.New,
+        description: '',
+        order: 0,
+        addedDate: '',
+        deadline: '',
+        startDate: '',
+        priority: TaskPriorities.Low,
+        todoListId: todolistId1
+    }
+    const endState = tasksReducer(startState, addTaskAC(newTask))
+
+    expect(endState[todolistId1].length).toBe(3)
+    expect(endState[todolistId1][0].title).toBe('NewTaskkk')
+    expect(endState[todolistId1][0].id).toBeDefined()
+    expect(endState[todolistId2].length).toBe(2)
+})
 
 test('correct task should be removed', () => {
     const endState = tasksReducer(startState, removeTaskAC(todolistId2, '4'))
@@ -77,7 +87,7 @@ test('correct task should be removed', () => {
 })
 
 test('title selected task should be changed', () => {
-    const endState = tasksReducer(startState, changeTitleTaskAC(todolistId2, '4', 'Izmenil'))
+    const endState = tasksReducer(startState, updateTaskAC(todolistId2, '4', {title: 'Izmenil'}))
     expect(endState[todolistId2].length).toBe(2)
     expect(endState[todolistId1][0].title).toBe("HTML&CSS")
     expect(endState[todolistId2][1].title).toBe('Izmenil')
