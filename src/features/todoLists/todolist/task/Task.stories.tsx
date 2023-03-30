@@ -1,9 +1,9 @@
 import {ComponentMeta, ComponentStory} from "@storybook/react";
-import {Task} from "../components/Task";
+import {Task} from "./Task";
 import {action} from "@storybook/addon-actions";
 import React from "react";
-import {TaskPriorities, TaskStatuses} from "../api/todolists-api";
-import {todolistId1} from "../state/todolists-reducer.test";
+import {TaskPriorities, TaskStatuses} from "../../../../api/todolists-api";
+import {todolistId1} from "../../todolists-reducer.test";
 
 
 export default {

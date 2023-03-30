@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect} from 'react';
-import {Todolist} from '../../Todolist';
+import {Todolist} from './todolist/Todolist';
 import {useAppDispatch, useAppSelector} from '../../hooks/hooks';
-import {changeTodolistTitleTC, fetchTodolistsTC, removeTodolistTC} from "../../state/todolists-reducer";
+import {changeTodolistTitleTC, fetchTodolistsTC, removeTodolistTC} from "./todolists-reducer";
 
 export const Todolists = () => {
 
@@ -45,7 +45,7 @@ export default Todolists;
 
 // {
 //     todolists.map(tl => {
-//         return <Todolist
+//         return <todolist
 //             key={tl.id}
 //             id={tl.id}
 //             title={tl.title}

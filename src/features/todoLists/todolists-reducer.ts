@@ -1,4 +1,4 @@
-import {TodolistsApi, TodolistType} from "../api/todolists-api";
+import {TodolistsApi, TodolistType} from "../../api/todolists-api";
 import {Dispatch} from "redux";
 
 

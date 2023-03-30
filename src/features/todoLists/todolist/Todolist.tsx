@@ -1,14 +1,15 @@
 import React, {useCallback, useEffect} from 'react';
 
-import {AddItemForm} from "./components/addItemForm/AddItemForm";
-import {EditableSpan} from "./components/editableSpan/EditableSpan";
+import {AddItemForm} from "../../../components/addItemForm/AddItemForm";
+import {EditableSpan} from "../../../components/editableSpan/EditableSpan";
 import {useSelector} from "react-redux";
-import {addTaskTC, fetchTasksTC, removeTaskTC, updateTaskTC} from "./state/tasks-reducer";
-import {RootReducerType} from "./store/store";
-import {changeTodoFilterAC, FilterValuesType} from "./state/todolists-reducer";
-import {Task} from "./components/Task";
-import {TaskStatuses, TaskType} from "./api/todolists-api";
-import {useAppDispatch} from "./hooks/hooks";
+import {addTaskTC, fetchTasksTC, removeTaskTC, updateTaskTC} from "../tasks-reducer";
+import {RootReducerType} from "../../../app/store";
+import {changeTodoFilterAC, FilterValuesType} from "../todolists-reducer";
+
+import {TaskStatuses, TaskType} from "../../../api/todolists-api";
+import {useAppDispatch} from "../../../hooks/hooks";
+import {Task} from "./task/Task";
 
 
 type PropsType = {
@@ -20,7 +21,7 @@ type PropsType = {
 }
 
 export const Todolist = React.memo((props: PropsType) => {
-    console.log('Todolist is called')
+    console.log('todolist is called')
 
     const dispatch = useAppDispatch()
     const tasks = useSelector<RootReducerType, Array<TaskType>>(state => state.tasks[props.id])

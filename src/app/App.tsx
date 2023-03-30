@@ -1,8 +1,8 @@
 import React, {useCallback, useEffect} from 'react';
 import './App.css';
-import {Todolist} from '../Todolist';
+import {Todolist} from '../features/todoLists/todolist/Todolist';
 import {AddItemForm} from "../components/addItemForm/AddItemForm";
-import {addTodolistTC, changeTodolistTitleTC, fetchTodolistsTC, removeTodolistTC} from "../state/todolists-reducer";
+import {addTodolistTC, changeTodolistTitleTC, fetchTodolistsTC, removeTodolistTC} from "../features/todoLists/todolists-reducer";
 import {TaskType} from "../api/todolists-api";
 import {useAppDispatch, useAppSelector} from "../hooks/hooks";
 import Todolists from '../features/todoLists/Todolists';
@@ -46,7 +46,7 @@ function App() {
             <AddItemForm addItem={addTodolist}/>
             {/*{*/}
             {/*    todolists.map(tl => {*/}
-            {/*        return <Todolist*/}
+            {/*        return <todolist*/}
             {/*            key={tl.id}*/}
             {/*            id={tl.id}*/}
             {/*            title={tl.title}*/}
