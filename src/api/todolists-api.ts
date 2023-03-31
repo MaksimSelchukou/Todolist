@@ -5,6 +5,10 @@ export const settings = {
     withCredentials: true
 }
 
+export type TasksStateType = {
+    [key: string]: Array<TaskType>
+}
+
 export type TodolistType = {
     id: string
     title: string
@@ -69,27 +73,6 @@ export type UpdateTaskModelType = {
     deadline: string | null
 }
 
-// export type UpdateTaskModelType = {
-//     title: string
-//     description: string
-//     status: number
-//     priority: number
-//     startDate: string
-//     deadline: string
-// }
-
-// export type TaskType = {
-//     title: string
-//     description: string
-//     status: TaskStatuses
-//     priority: TaskPriorities
-//     startDate: string
-//     deadline: string
-//     id: string
-//     todoListId: string
-//     order: number
-//     addedDate: string
-// }
 
 export const TodolistsApi = {
     getTodolists() {
@@ -114,6 +97,6 @@ export const TodolistsApi = {
         return instance.delete<ResponseType>(`/todo-lists/${todolistID}/tasks/${taskID}`)
     },
     updateTask(todolistID: string, taskID: string, model: UpdateTaskModelType) {
-        return instance.put(`/todo-lists/${todolistID}/tasks/${taskID}`, {...model})
+        return instance.put<ResponseType>(`/todo-lists/${todolistID}/tasks/${taskID}`, {...model})
     }
 }

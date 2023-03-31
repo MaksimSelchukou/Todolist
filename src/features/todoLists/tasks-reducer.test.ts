@@ -1,8 +1,8 @@
-import {TasksStateType} from "../../app/App";
+
 import {todolistId1, todolistId2} from "./todolists-reducer.test";
 import {updateTaskAC, changeTitleTaskAC, removeTaskAC, tasksReducer, addTaskAC} from "./tasks-reducer";
 import {addTodoAC, removeTodoAC} from "./todolists-reducer";
-import {TaskPriorities, TaskStatuses} from "../../api/todolists-api";
+import {TaskPriorities, TasksStateType, TaskStatuses} from "../../api/todolists-api";
 import {v1} from "uuid";
 
 

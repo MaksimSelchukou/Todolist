@@ -1,12 +1,13 @@
-import {TaskType, TodolistsApi, UpdateTaskModelType} from "../../api/todolists-api";
-import {TasksStateType} from "../../app/App";
+import {TasksStateType, TaskType, TodolistsApi, UpdateTaskModelType} from "../../api/todolists-api";
+
 
 import {AddTodoType, ChangeTodoFilterType, RemoveTodoType, SetTodolistsType} from "./todolists-reducer";
 import {Dispatch} from "redux";
 import {RootState} from "../../app/store";
+import {AppReducersActionsType, setAppErrorAC, setAppStatusAC} from "../../app/app-reducer";
 
 // reducers
-export const tasksReducer = (state: TasksStateType = {}, action: TasksReducerActionsType): TasksStateType => {
+export const tasksReducer = (state: TasksStateType = {}, action: TasksReducersActionsType): TasksStateType => {
     switch (action.type) {
         case "SET-TASKS": {
             return {...state, [action.todoID]: action.tasks}
@@ -69,20 +70,34 @@ export const updateTaskAC = (todoID: string, taskID: string, model: ModelDomainT
 } as const)
 
 // thunks
-export const fetchTasksTC = (todoID: string) => (dispatch: Dispatch<TasksReducerActionsType>) => {
+export const fetchTasksTC = (todoID: string) => (dispatch: Dispatch<TasksReducersActionsType | AppReducersActionsType>) => {
+    dispatch(setAppStatusAC("loading"))
     TodolistsApi.getTasks(todoID)
-        .then(res => dispatch(setTasksAC(res.data.items, todoID)))
+        .then(res => {
+            dispatch(setTasksAC(res.data.items, todoID))
+            dispatch(setAppStatusAC('succeeded'))
+        })
 }
 export const removeTaskTC = (todoID: string, taskID: string) => (dispatch: Dispatch) => {
     TodolistsApi.removeTask(todoID, taskID)
         .then(res => dispatch(removeTaskAC(todoID, taskID)))
 }
 export const addTaskTC = (title: string, todoID: string) => (dispatch: Dispatch) => {
-    // const task:TaskType = getState.tasks[todoID]
+    dispatch(setAppStatusAC("loading"))
     TodolistsApi.createTask(todoID, title)
         .then(res => {
-            console.log(res.data.data)
-            dispatch(addTaskAC(res.data.data.item))
+            if (res.data.resultCode === 0) {
+                dispatch(addTaskAC(res.data.data.item))
+                dispatch(setAppStatusAC('succeeded'))
+            } else {
+                if (res.data.messages.length) {
+                    dispatch(setAppErrorAC(res.data.messages[0]))
+                } else {
+                    dispatch(setAppErrorAC('Some Error occurred'))
+                }
+                dispatch(setAppStatusAC("failed"))
+            }
+
         })
 }
 export const updateTaskTC = (taskID: string, model: ModelDomainType, todolistId: string) => (dispatch: Dispatch, getState: () => RootState) => {
@@ -101,17 +116,30 @@ export const updateTaskTC = (taskID: string, model: ModelDomainType, todolistId:
         deadline: task.deadline,
         ...model
     }
+    dispatch(setAppStatusAC("loading"))
     TodolistsApi.updateTask(todolistId, taskID, modelAPITask)
         .then(res => {
-            console.log({...task})
-            dispatch(updateTaskAC(todolistId, taskID, model))
+            if (res.data.resultCode === 0) {
+                dispatch(updateTaskAC(todolistId, taskID, model))
+                dispatch(setAppStatusAC('succeeded'))
+            } else {
+                if (res.data.messages.length) {
+                    dispatch(setAppErrorAC(res.data.messages[0]))
+                } else {
+                    dispatch(setAppErrorAC('Some Error occurred'))
+                }
+                dispatch(setAppStatusAC("failed"))
+            }
+        })
+        .catch((err) => {
+            dispatch(setAppErrorAC(err.message))
         })
 }
 
 
 // types
 
-export type TasksReducerActionsType =
+export type TasksReducersActionsType =
     | AddTaskType
     | RemoveTaskType
     | ChangeTitleTaskType

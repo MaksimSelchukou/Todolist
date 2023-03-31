@@ -1,13 +1,14 @@
 import {TodolistsApi, TodolistType} from "../../api/todolists-api";
 import {Dispatch} from "redux";
+import {AppStatusType, setAppStatusAC} from "../../app/app-reducer";
 
 
-export const todolistsReducer = (state: TodolistsStateType = [], action: ActionTodolistType): TodolistsStateType => {
+export const todolistsReducer = (state: TodolistsStateType = [], action: TodolistsReducersActionsType): TodolistsStateType => {
     switch (action.type) {
         case 'SET-TODOLISTS':
-            return action.todolists.map(todo => ({...state, ...todo, filter: 'all'}))
+            return action.todolists.map(todo => ({...state, ...todo, filter: 'all', entityStatus: 'idle'}))
         case  'ADD-TODOLIST':
-            return [{...action.todolist, filter: "all"}, ...state]
+            return [{...action.todolist, filter: "all", entityStatus: 'idle'}, ...state]
         case "REMOVE-TODOLIST":
             return state.filter(todo => todo.id !== action.todoID)
         case "CHANGE-TITLE-TODO": {
@@ -48,8 +49,13 @@ export const setTodolistsAC = (todolists: Array<TodolistType>) => ({
 // thunks
 
 export const fetchTodolistsTC = () => (dispatch: Dispatch) => {
+    dispatch(setAppStatusAC('loading'))
     TodolistsApi.getTodolists()
-        .then(res => dispatch(setTodolistsAC(res.data)))
+        .then(res => {
+            dispatch(setTodolistsAC(res.data))
+            dispatch(setAppStatusAC('succeeded'))
+        })
+
 }
 export const removeTodolistTC = (todoID: string) => (dispatch: Dispatch) => {
     TodolistsApi.removeTodolist(todoID)
@@ -69,7 +75,8 @@ export const changeTodolistTitleTC = (todoID: string, title: string) => (dispatc
 
 export type FilterValuesType = "all" | "active" | "completed";
 export type TodolistDomainType = TodolistType & {
-    filter: FilterValuesType
+    filter: FilterValuesType,
+    entityStatus: AppStatusType
 }
 
 export type AddTodoType = ReturnType<typeof addTodoAC>
@@ -80,7 +87,7 @@ export type SetTodolistsType = ReturnType<typeof setTodolistsAC>
 
 type TodolistsStateType = Array<TodolistDomainType>;
 
-export type ActionTodolistType =
+export type TodolistsReducersActionsType =
     | AddTodoType
     | RemoveTodoType
     | ChangeTodoTitleType

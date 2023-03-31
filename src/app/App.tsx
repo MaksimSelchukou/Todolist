@@ -1,64 +1,44 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback} from 'react';
+import Box from '@mui/material/Box';
+import LinearProgress from '@mui/material/LinearProgress';
 import './App.css';
-import {Todolist} from '../features/todoLists/todolist/Todolist';
 import {AddItemForm} from "../components/addItemForm/AddItemForm";
-import {addTodolistTC, changeTodolistTitleTC, fetchTodolistsTC, removeTodolistTC} from "../features/todoLists/todolists-reducer";
-import {TaskType} from "../api/todolists-api";
+import {addTodolistTC} from "../features/todoLists/todolists-reducer";
+
 import {useAppDispatch, useAppSelector} from "../hooks/hooks";
 import Todolists from '../features/todoLists/Todolists';
+import {CustomizedSnackbars} from "../components/errorSnackBar/ErrorSnackBar";
 
 
-
-export type TasksStateType = {
-    [key: string]: Array<TaskType>
-}
-
+// export function LinearIndeterminate() {
+//     return (
+//         <Box sx={{width: '100%'}}>
+//             <LinearProgress/>
+//         </Box>
+//     );
+// }
 
 function App() {
 
     const dispatch = useAppDispatch()
-    // const todolists = useAppSelector(state => state.todolists)
-    // console.log(todolists)
-
-    // useEffect(() => {
-    //
-    //     dispatch(fetchTodolistsTC())
-    // }, [])
-
+    const appStatus = useAppSelector(state => state.app.status)
     const addTodolist = useCallback((titleTodo: string) => {
-        // const action = addTodoAC(titleTodo)
         dispatch(addTodolistTC(titleTodo))
     }, [dispatch])
 
-    // const removeTodolist = useCallback((id: string) => {
-    //     // const action = removeTodoAC(id)
-    //     // dispatch(action)
-    //     dispatch(removeTodolistTC(id))
-    // }, [dispatch])
-    //
-    // const changeTitleTodo = useCallback((todoID: string, title: string) => {
-    //   //  dispatch(changeTodoTitleAC(todoID, title))
-    //     dispatch(changeTodolistTitleTC(todoID, title))
-    // }, [dispatch])
-
+    console.log('appStatus',appStatus)
     return (
-        <div className="App">
-            <AddItemForm addItem={addTodolist}/>
-            {/*{*/}
-            {/*    todolists.map(tl => {*/}
-            {/*        return <todolist*/}
-            {/*            key={tl.id}*/}
-            {/*            id={tl.id}*/}
-            {/*            title={tl.title}*/}
-            {/*            filter={tl.filter}*/}
-            {/*            removeTodolist={removeTodolist}*/}
-            {/*            changeTitleTodo={changeTitleTodo}*/}
-            {/*        />*/}
-            {/*    })*/}
-            {/*}*/}
-            <Todolists/>
+        <>
+            {/*{LinearIndeterminate()}*/}
+            {/*{appStatus === 'loading'  && <LinearProgress/>}*/}
+            {appStatus === 'loading'  && <LinearProgress/>}
+            <CustomizedSnackbars/>
+            <div className="App">
 
-        </div>
+                <AddItemForm addItem={addTodolist}/>
+                <Todolists/>
+            </div>
+        </>
     );
 }
 

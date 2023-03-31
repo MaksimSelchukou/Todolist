@@ -1,7 +1,8 @@
-import {TasksStateType} from "../../app/App";
+
 import {addTodoAC, TodolistDomainType, todolistsReducer} from "./todolists-reducer";
 import {tasksReducer} from "./tasks-reducer";
 import {v1} from "uuid";
+import { TasksStateType } from "../../api/todolists-api";
 
 
 test('generate todoID should be the same in array todolists and object tasks', () => {
