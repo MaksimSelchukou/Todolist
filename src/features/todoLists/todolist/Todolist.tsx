@@ -5,7 +5,7 @@ import {EditableSpan} from "../../../components/editableSpan/EditableSpan";
 import {useSelector} from "react-redux";
 import {addTaskTC, fetchTasksTC, removeTaskTC, updateTaskTC} from "../tasks-reducer";
 import {RootReducerType} from "../../../app/store";
-import {changeTodoFilterAC, FilterValuesType} from "../todolists-reducer";
+import {changeTodoFilterAC, FilterValuesType, TodolistDomainType} from "../todolists-reducer";
 
 import {TaskStatuses, TaskType} from "../../../api/todolists-api";
 import {useAppDispatch} from "../../../hooks/hooks";
@@ -18,42 +18,33 @@ type PropsType = {
     removeTodolist: (id: string) => void
     filter: FilterValuesType
     changeTitleTodo: (todoID: string, title: string) => void
+    todolist: TodolistDomainType
 }
 
 export const Todolist = React.memo((props: PropsType) => {
-    console.log('todolist is called')
+    // console.log('todolist is called')
 
     const dispatch = useAppDispatch()
     const tasks = useSelector<RootReducerType, Array<TaskType>>(state => state.tasks[props.id])
 
+    // const entityStatus = useAppSelector(state=>state.todolists)
+
     function removeTask(id: string, todolistId: string) {
-        // const action = removeTaskAC(todolistId, id)
         dispatch(removeTaskTC(todolistId, id))
     }
 
     const addTask = (title: string) => {
-        // const action = addTaskAC(props.id, title)
-        // dispatch(action)
-        // const action = addTaskAC(props.id, title)
         dispatch(addTaskTC(title, props.id))
     }
 
     function changeStatus(id: string, status: TaskStatuses, todolistId: string) {
-        // const action = changeStatusTaskAC(todolistId, id, status)
         const action = updateTaskTC(id, {status}, todolistId)
         dispatch(action)
     }
 
     const changeTitleTask = useCallback((todoID: string, taskID: string, title: string) => {
-        // const action = changeTitleTaskAC(todoID, taskID, title)
-        // dispatch(action)
         dispatch(updateTaskTC(taskID, {title}, todoID))
     }, [dispatch])
-
-    // const changeTitleTask = (todoID: string, taskID: string, title: string) => {
-    //     const action = changeTitleTaskAC(todoID, taskID, title)
-    //     dispatch(action)
-    // }
 
     const changeFilter = useCallback((value: FilterValuesType, todolistId: string) => {
         const action = changeTodoFilterAC(todolistId, value)
@@ -63,11 +54,6 @@ export const Todolist = React.memo((props: PropsType) => {
     const addItemHandler = useCallback((title: string) => addTask(title), [])
 
     const removeTodolist = () => props.removeTodolist(props.id)
-
-    // const onAllClickHandler = () => changeFilter("all", props.id);
-    // const onActiveClickHandler = () => changeFilter("active", props.id);
-    // const onCompletedClickHandler = () => changeFilter("completed", props.id);
-
 
     const onButtonClickHandler = (value: FilterValuesType) => {
         return () => changeFilter(value, props.id);
@@ -96,7 +82,7 @@ export const Todolist = React.memo((props: PropsType) => {
 
         <h3>
             <EditableSpan title={props.title} onChange={changeTodoTitleHandler}/>
-            <button onClick={removeTodolist}>x</button>
+            <button disabled={props.todolist.entityStatus === 'loading'} onClick={removeTodolist}>x</button>
         </h3>
 
         <AddItemForm addItem={addItemHandler}/>

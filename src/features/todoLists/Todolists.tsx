@@ -25,6 +25,7 @@ export const Todolists = () => {
             {todolists.map(tl => {
                 return (
                     <Todolist
+                        todolist={tl}
                         key={tl.id}
                         id={tl.id}
                         title={tl.title}

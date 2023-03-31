@@ -1,8 +1,8 @@
 export type AppReducersActionsType = SetAppErrorType | SetAppStatusType
 
-export type AppStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
+export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
 export type InitialStateType = {
-    status: AppStatusType
+    status: RequestStatusType
     error: string | null
 }
 
@@ -30,4 +30,4 @@ type SetAppErrorType = ReturnType<typeof setAppErrorAC>
 export const setAppErrorAC = (error: string | null) => ({type: 'APP/SET-ERROR', error} as const)
 
 type SetAppStatusType = ReturnType<typeof setAppStatusAC>
-export const setAppStatusAC = (status: AppStatusType) => ({type: 'APP/SET-STATUS', status} as const)
+export const setAppStatusAC = (status: RequestStatusType) => ({type: 'APP/SET-STATUS', status} as const)
