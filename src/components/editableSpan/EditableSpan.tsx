@@ -3,6 +3,7 @@ import React, {ChangeEvent, useState} from 'react';
 type EditableSpanType = {
     title: string
     onChange: (title: string) => void
+    className?:any
 
 }
 
@@ -30,6 +31,6 @@ export const EditableSpan = React.memo(({title, ...props}: EditableSpanType) => 
         editMode ?
             <input autoFocus onBlur={onBlurHandler} value={editTitle} type="text" onChange={onChangeHandler}/>
             :
-            <span onDoubleClick={onDoubleClickHandler}>{title}</span>
+            <span className={props.className} onDoubleClick={onDoubleClickHandler}>{title}</span>
     );
 });

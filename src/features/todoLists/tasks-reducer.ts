@@ -5,6 +5,7 @@ import {AddTodoType, ChangeTodoFilterType, RemoveTodoType, SetTodolistsType} fro
 import {Dispatch} from "redux";
 import {RootState} from "../../app/store";
 import {AppReducersActionsType, setAppErrorAC, setAppStatusAC} from "../../app/app-reducer";
+import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 
 // reducers
 export const tasksReducer = (state: TasksStateType = {}, action: TasksReducersActionsType): TasksStateType => {
@@ -74,13 +75,26 @@ export const fetchTasksTC = (todoID: string) => (dispatch: Dispatch<TasksReducer
     dispatch(setAppStatusAC("loading"))
     TodolistsApi.getTasks(todoID)
         .then(res => {
+            debugger
             dispatch(setTasksAC(res.data.items, todoID))
             dispatch(setAppStatusAC('succeeded'))
         })
+        .catch(err => {
+            handleServerNetworkError(err, dispatch)
+        })
 }
 export const removeTaskTC = (todoID: string, taskID: string) => (dispatch: Dispatch) => {
+    dispatch(setAppStatusAC("loading"))
     TodolistsApi.removeTask(todoID, taskID)
-        .then(res => dispatch(removeTaskAC(todoID, taskID)))
+        .then(res => {
+            if (res.data.resultCode === 0) {
+                dispatch(removeTaskAC(todoID, taskID))
+                dispatch(setAppStatusAC('succeeded'))
+            } else {
+                handleServerAppError(res.data, dispatch)
+            }
+
+        })
 }
 export const addTaskTC = (title: string, todoID: string) => (dispatch: Dispatch) => {
     dispatch(setAppStatusAC("loading"))
@@ -90,14 +104,12 @@ export const addTaskTC = (title: string, todoID: string) => (dispatch: Dispatch)
                 dispatch(addTaskAC(res.data.data.item))
                 dispatch(setAppStatusAC('succeeded'))
             } else {
-                if (res.data.messages.length) {
-                    dispatch(setAppErrorAC(res.data.messages[0]))
-                } else {
-                    dispatch(setAppErrorAC('Some Error occurred'))
-                }
-                dispatch(setAppStatusAC("failed"))
+                handleServerAppError(res.data, dispatch)
             }
 
+        })
+        .catch(err => {
+            handleServerNetworkError(err, dispatch)
         })
 }
 export const updateTaskTC = (taskID: string, model: ModelDomainType, todolistId: string) => (dispatch: Dispatch, getState: () => RootState) => {
@@ -123,19 +135,13 @@ export const updateTaskTC = (taskID: string, model: ModelDomainType, todolistId:
                 dispatch(updateTaskAC(todolistId, taskID, model))
                 dispatch(setAppStatusAC('succeeded'))
             } else {
-                if (res.data.messages.length) {
-                    dispatch(setAppErrorAC(res.data.messages[0]))
-                } else {
-                    dispatch(setAppErrorAC('Some Error occurred'))
-                }
-                dispatch(setAppStatusAC("failed"))
+                handleServerAppError(res.data, dispatch)
             }
         })
         .catch((err) => {
-            dispatch(setAppErrorAC(err.message))
+            handleServerNetworkError(err, dispatch)
         })
 }
-
 
 // types
 

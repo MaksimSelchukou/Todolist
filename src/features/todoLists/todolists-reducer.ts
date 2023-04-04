@@ -1,6 +1,7 @@
 import {TodolistsApi, TodolistType} from "../../api/todolists-api";
 import {Dispatch} from "redux";
 import {RequestStatusType, setAppErrorAC, setAppStatusAC} from "../../app/app-reducer";
+import {handleServerAppError} from "../../utils/error-utils";
 
 
 export const todolistsReducer = (state: TodolistsStateType = [], action: TodolistsReducersActionsType): TodolistsStateType => {
@@ -66,21 +67,15 @@ export const fetchTodolistsTC = () => (dispatch: Dispatch) => {
 }
 export const removeTodolistTC = (todoID: string) => (dispatch: Dispatch) => {
     dispatch(setAppStatusAC('loading'))
-    dispatch(changeTodoEntityStatusAC(todoID,'loading'))
+    dispatch(changeTodoEntityStatusAC(todoID, 'loading'))
     TodolistsApi.removeTodolist(todoID)
         .then(res => {
             if (res.data.resultCode === 0) {
                 dispatch(removeTodoAC(todoID))
                 dispatch(setAppStatusAC("succeeded"))
             } else {
-                if (res.data.messages) {
-                    console.log('res.data.messages', res.data.messages)
-                    dispatch(setAppErrorAC(res.data.messages[0]))
-                } else {
-                    dispatch(setAppErrorAC('Some Error occurred'))
-                }
+                handleServerAppError(res.data, dispatch)
             }
-
         })
 }
 export const addTodolistTC = (titleTodo: string) => (dispatch: Dispatch) => {

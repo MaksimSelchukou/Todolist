@@ -23,12 +23,14 @@ export const Task = React.memo((props: TaskPropsType) => {
     }
     // console.log(props.task.status)
     // console.log(props.task.status === TaskStatuses.Completed)
+
+    // className={props.task.status === TaskStatuses.Completed ? "is-done" : ""}
     return (
         <li
-            key={props.task.id} className={props.task.status === TaskStatuses.Completed ? "is-done" : ""}>
+            key={props.task.id} >
             <input type="checkbox" onChange={onChangeHandler} checked={props.task.status === TaskStatuses.Completed}/>
             {/*<span>{t.title}</span>*/}
-            <EditableSpan title={props.task.title}
+            <EditableSpan className={props.task.status === TaskStatuses.Completed ? "is-done" : ""}  title={props.task.title}
                           onChange={changeTitleTaskHandler}
             />
             <button onClick={onClickHandler}>x</button>

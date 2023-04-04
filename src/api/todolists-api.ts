@@ -44,7 +44,7 @@ export type TaskType = {
     addedDate: string
 }
 
-type ResponseType<D = {}> = {
+export type ResponseType<D = {}> = {
     data: D
     fieldsErrors: []
     messages: Array<string>
