@@ -1,41 +1,61 @@
-import React, {useCallback} from 'react';
+import React, {useEffect} from 'react';
 import Box from '@mui/material/Box';
 import LinearProgress from '@mui/material/LinearProgress';
 import './App.css';
-import {AddItemForm} from "../components/addItemForm/AddItemForm";
-import {addTodolistTC} from "../features/todoLists/todolists-reducer";
+
 
 import {useAppDispatch, useAppSelector} from "../hooks/hooks";
 import Todolists from '../features/todoLists/Todolists';
 import {CustomizedSnackbars} from "../components/errorSnackBar/ErrorSnackBar";
+import CircularProgress from '@mui/material/CircularProgress/CircularProgress';
+import {setAppInitializedTC} from "./app-reducer";
 
 
-// export function LinearIndeterminate() {
-//     return (
-//         <Box sx={{width: '100%'}}>
-//             <LinearProgress/>
-//         </Box>
-//     );
-// }
+// const router = createBrowserRouter([
+//     {
+//         path: "/",
+//         element: <Todolists/>,
+//     },
+//     {
+//         path: "/login",
+//         element: <Login/>,
+//     }
+// ]);
 
 function App() {
 
-    const dispatch = useAppDispatch()
-    const appStatus = useAppSelector(state => state.app.status)
-    const addTodolist = useCallback((titleTodo: string) => {
-        dispatch(addTodolistTC(titleTodo))
-    }, [dispatch])
 
-    console.log('appStatus',appStatus)
+    const dispatch = useAppDispatch()
+    const isInitialized = useAppSelector(state => state.app.isInitialized)  //залогинен
+    const appStatus = useAppSelector(state => state.app.status)
+
+
+    useEffect(() => {
+        // debugger
+        dispatch(setAppInitializedTC())
+    }, [])
+
+    if (!isInitialized) {
+        return (
+            <Box sx={{display: 'flex', justifyContent: 'center'}}>
+                <CircularProgress/>
+                <CustomizedSnackbars/>
+            </Box>
+        )
+
+    }
+    debugger
     return (
         <>
-            {/*{LinearIndeterminate()}*/}
-            {/*{appStatus === 'loading'  && <LinearProgress/>}*/}
-            {appStatus === 'loading'  && <LinearProgress/>}
+            {appStatus === 'loading' && <LinearProgress/>}
             <CustomizedSnackbars/>
             <div className="App">
-
-                <AddItemForm addItem={addTodolist}/>
+                {/*<RouterProvider router={router}/>*/}
+                {/*<Routes>*/}
+                {/*    <Route path={"/"} element={<Todolists/>}/>*/}
+                {/*    <Route path={"/login"} element={<Login/>}/>*/}
+                {/*</Routes>*/}
+                {/*<Login/>*/}
                 <Todolists/>
             </div>
         </>

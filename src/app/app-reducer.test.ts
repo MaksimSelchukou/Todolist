@@ -4,7 +4,8 @@ test('if an error occurs,then field error to be changed', () => {
 
     const startState: InitialStateType = {
         status: 'idle',
-        error: null
+        error: null,
+        isInitialized:false
     }
 
     const endState = appReducer(startState, setAppErrorAC('error'))
