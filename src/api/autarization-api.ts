@@ -26,6 +26,9 @@ export const AutarizationApi = {
 
     isLoggedIn(values: ValuesType) {
         return instance.post<ResponseType<AuthData>>('login', {...values})
+    },
+    isLoggedOut(){
+        return instance.delete<ResponseType>('login')
     }
 
 }
