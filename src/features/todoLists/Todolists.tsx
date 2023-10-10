@@ -33,7 +33,6 @@ export const Todolists = () => {
     if (!isLoggedIn) {
         return <Navigate to={'/login'}/>
     }
-    debugger
     return (
         <>
             <AddItemForm addItem={addTodolist}/>

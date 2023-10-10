@@ -23,7 +23,6 @@ function App() {
     const appStatus = useAppSelector(state => state.app.status)
 
     const logOutHandler = useCallback(() => {
-        debugger
         dispatch(setIsLoggedOutTC())
     },[])
 
@@ -40,7 +39,6 @@ function App() {
         )
 
     }
-    debugger
     return (
         <>
             {appStatus === 'loading' && <LinearProgress/>}

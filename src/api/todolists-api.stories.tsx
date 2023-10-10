@@ -58,7 +58,7 @@ export const UpdateTodolist = () => {
         const title = 'Obnovil eche'
         TodolistsApi.updateTodolist(todolistId, title)
             .then((res) => {
-                debugger
+
                 setState(res.data)
             })
     }, [])
@@ -72,7 +72,7 @@ export const GetTasks = () => {
         const todoID = '7c1f9cb4-e7b2-4e8d-b2f8-c5eeaf0184fb'
         TodolistsApi.getTasks(todoID)
             .then((res) => {
-                debugger
+
                 setState(res.data)
             })
     }, [])
@@ -87,7 +87,7 @@ export const CreateTask = () => {
         const titleTask = 'eto new taska'
         TodolistsApi.createTask(todoID, titleTask)
             .then((res) => {
-                debugger
+
                 setState(res.data)
             })
     }, [])

@@ -5,8 +5,7 @@ import * as serviceWorker from './serviceWorker';
 import {createRoot} from 'react-dom/client';
 import {Provider} from "react-redux";
 import {store} from './app/store';
-import {BrowserRouter, createBrowserRouter} from "react-router-dom";
-import {Login} from "./features/login/Login";
+import {BrowserRouter} from "react-router-dom";
 
 const container = document.getElementById('root') as HTMLElement
 const root = createRoot(container);

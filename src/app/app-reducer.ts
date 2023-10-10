@@ -44,7 +44,6 @@ type SetAppStatusType = ReturnType<typeof setAppStatusAC>
 export const setAppStatusAC = (status: RequestStatusType) => ({type: 'APP/SET-STATUS', status} as const)
 
 type SetAppInitializedType = ReturnType<typeof setAppInitializedAC>
-debugger
 export const setAppInitializedAC = (value: boolean) => ({type: 'APP/SET-IS-INITIALIZED', value} as const)
 
 
@@ -52,13 +51,11 @@ export const setAppInitializedAC = (value: boolean) => ({type: 'APP/SET-IS-INITI
 
 
 export const setAppInitializedTC = () => (dispatch: Dispatch) => {
-    debugger
     dispatch(setAppStatusAC("loading"))
     AutarizationApi.authMe()
         .then(res => {
-            debugger
             if (res.data.resultCode === 0) {
-                dispatch(setIsLoggedInAC(true))
+                dispatch(setIsLoggedInAC({value:true}))
                 dispatch(setAppStatusAC("succeeded"))
             } else {
                 handleServerAppError(res.data, dispatch)
@@ -66,7 +63,6 @@ export const setAppInitializedTC = () => (dispatch: Dispatch) => {
             dispatch(setAppInitializedAC(true))
         })
         .catch(err => {
-            debugger
             handleServerNetworkError(err, dispatch)
             // dispatch(setAppStatusAC("failed"))
             // dispatch(setAppInitializedAC(true))

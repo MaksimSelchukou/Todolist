@@ -56,7 +56,6 @@ export const Login = () => {
             formik.resetForm()
         },
     });
-    debugger
     if (isLoggedIn) {
         return <Navigate to={'/'}/>
     }

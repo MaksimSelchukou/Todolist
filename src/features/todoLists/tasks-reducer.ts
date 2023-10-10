@@ -11,9 +11,11 @@ import {handleServerAppError, handleServerNetworkError} from "../../utils/error-
 export const tasksReducer = (state: TasksStateType = {}, action: TasksReducersActionsType): TasksStateType => {
     switch (action.type) {
         case "SET-TASKS": {
+            debugger
             return {...state, [action.todoID]: action.tasks}
         }
         case "SET-TODOLISTS": {
+            debugger
             const stateCopy = {...state}
             action.todolists.forEach(tl => {
                 stateCopy[tl.id] = []
@@ -26,15 +28,6 @@ export const tasksReducer = (state: TasksStateType = {}, action: TasksReducersAc
         case "REMOVE-TASK": {
             return {...state, [action.todolistId]: state[action.todolistId].filter(task => task.id !== action.taskID)}
         }
-        // case "CHANGE-TITLE-TASK": {
-        //     return {
-        //         ...state,
-        //         [action.todoId]: state[action.todoId].map(task => task.id === action.taskId ? {
-        //             ...task,
-        //             title: action.title
-        //         } : task)
-        //     }
-        // }
         case "UPDATE-TASK":
             return {
                 ...state, [action.todoID]: state[action.todoID]
@@ -75,7 +68,6 @@ export const fetchTasksTC = (todoID: string) => (dispatch: Dispatch<TasksReducer
     dispatch(setAppStatusAC("loading"))
     TodolistsApi.getTasks(todoID)
         .then(res => {
-            debugger
             dispatch(setTasksAC(res.data.items, todoID))
             dispatch(setAppStatusAC('succeeded'))
         })

@@ -7,6 +7,7 @@ import {handleServerAppError, handleServerNetworkError} from "../../utils/error-
 export const todolistsReducer = (state: TodolistsStateType = [], action: TodolistsReducersActionsType): TodolistsStateType => {
     switch (action.type) {
         case 'SET-TODOLISTS':
+            debugger
             return action.todolists.map(todo => ({...state, ...todo, filter: 'all', entityStatus: 'idle'}))
         case  'ADD-TODOLIST':
             return [{...action.todolist, filter: "all", entityStatus: 'idle'}, ...state]
@@ -86,8 +87,19 @@ export const addTodolistTC = (titleTodo: string) => (dispatch: Dispatch) => {
         .then(res => dispatch(addTodoAC(res.data.data.item)))
 }
 export const changeTodolistTitleTC = (todoID: string, title: string) => (dispatch: Dispatch) => {
+    dispatch(setAppStatusAC('loading'))
     TodolistsApi.updateTodolist(todoID, title)
-        .then(res => dispatch(changeTodoTitleAC(todoID, title)))
+        .then(res => {
+            if (res.data.resultCode === 0) {
+                dispatch(changeTodoTitleAC(todoID, title))
+                dispatch(setAppStatusAC('succeeded'))
+            } else {
+                handleServerAppError(res.data, dispatch)
+            }
+        })
+        .catch((err) => {
+            handleServerNetworkError(err, dispatch)
+        })
 }
 
 

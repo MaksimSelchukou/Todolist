@@ -4,7 +4,7 @@ import {AddItemForm} from "../../../components/addItemForm/AddItemForm";
 import {EditableSpan} from "../../../components/editableSpan/EditableSpan";
 import {useSelector} from "react-redux";
 import {addTaskTC, fetchTasksTC, removeTaskTC, updateTaskTC} from "../tasks-reducer";
-import {RootReducerType} from "../../../app/store";
+import {AppRootStateType} from "../../../app/store";
 import {changeTodoFilterAC, FilterValuesType, TodolistDomainType} from "../todolists-reducer";
 
 import {TaskStatuses, TaskType} from "../../../api/todolists-api";
@@ -25,7 +25,7 @@ export const Todolist = React.memo((props: PropsType) => {
     // console.log('todolist is called')
 
     const dispatch = useAppDispatch()
-    const tasks = useSelector<RootReducerType, Array<TaskType>>(state => state.tasks[props.id])
+    const tasks = useSelector<AppRootStateType, Array<TaskType>>(state => state.tasks[props.id])
 
     // const entityStatus = useAppSelector(state=>state.todolists)
 
