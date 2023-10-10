@@ -2,13 +2,12 @@ import React, {useCallback, useEffect} from 'react';
 
 import {AddItemForm} from "../../../components/addItemForm/AddItemForm";
 import {EditableSpan} from "../../../components/editableSpan/EditableSpan";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {addTaskTC, fetchTasksTC, removeTaskTC, updateTaskTC} from "../tasks-reducer";
 import {AppRootStateType} from "../../../app/store";
 import {changeTodoFilterAC, FilterValuesType, TodolistDomainType} from "../todolists-reducer";
 
 import {TaskStatuses, TaskType} from "../../../api/todolists-api";
-import {useAppDispatch} from "../../../hooks/hooks";
 import {Task} from "./task/Task";
 
 
@@ -24,7 +23,7 @@ type PropsType = {
 export const Todolist = React.memo((props: PropsType) => {
     // console.log('todolist is called')
 
-    const dispatch = useAppDispatch()
+    const dispatch = useDispatch<any>()
     const tasks = useSelector<AppRootStateType, Array<TaskType>>(state => state.tasks[props.id])
 
     // const entityStatus = useAppSelector(state=>state.todolists)
@@ -47,9 +46,9 @@ export const Todolist = React.memo((props: PropsType) => {
     }, [dispatch])
 
     const changeFilter = useCallback((value: FilterValuesType, todolistId: string) => {
-        const action = changeTodoFilterAC(todolistId, value)
+        const action = changeTodoFilterAC({todoID: todolistId, filter: value})
         dispatch(action)
-    }, [])
+    }, [dispatch])
 
     const addItemHandler = useCallback((title: string) => addTask(title), [])
 

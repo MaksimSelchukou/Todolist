@@ -106,7 +106,7 @@ test('status selected task should be changed', () => {
 })
 
 test('after add todolist should be added empty array tasks', () => {
-    const endState = tasksReducer(startState, addTodoAC({id: v1(), title: 'NewTitleTodo', addedDate: '', order: 0}))
+    const endState = tasksReducer(startState, addTodoAC({todolist:{id: v1(), title: 'NewTitleTodo', addedDate: '', order: 0} }))
 
     const keys = Object.keys(endState)
     const key = keys.find(key => key !== todolistId2 && key !== todolistId1)
@@ -118,7 +118,7 @@ test('after add todolist should be added empty array tasks', () => {
 })
 
 test('property todolistId should be remove after remove todolist', () => {
-    const endState = tasksReducer(startState, removeTodoAC(todolistId1))
+    const endState = tasksReducer(startState, removeTodoAC({todoID:todolistId1} ))
 
     const keys = Object.keys(endState)
 

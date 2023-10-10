@@ -8,7 +8,7 @@ test('if an error occurs,then field error to be changed', () => {
         isInitialized:false
     }
 
-    const endState = appReducer(startState, setAppErrorAC('error'))
+    const endState = appReducer(startState, setAppErrorAC({error: 'error'}))
 
     expect(endState.error).toBe('error')
 })
